@@ -1,8 +1,8 @@
 # 티켓랭킹 자동화 프로그램
-
 ---
 
 > REFramework 기반으로 YES24 티켓 랭킹 데이터를 수집하고, 정리된 결과를 메일로 자동 전송하는 RPA 프로그램입니다.
+
 
 ## 기술 환경
 
@@ -10,6 +10,7 @@
 - Robotic Enterprise Framework (REFramework)
 - Excel, Web Automation
 - HTML Email, DataTable, Dictionary 등 활용
+
 
 ## 자동화 흐름 요약
 
@@ -21,6 +22,7 @@
 6. 성공/실패 항목 구분 및 처리 결과 적용
 7. 전체 결과를 Excel 파일로 저장
 8. 메일 본문 작성 및 Excel 첨부 후 자동 발송
+
 
 ## Workflow 구성
 
