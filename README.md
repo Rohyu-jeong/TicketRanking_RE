@@ -1,39 +1,40 @@
-### Documentation is included in the Documentation folder ###
+#### 티켓랭킹 자동화 프로그램
+---
+REFramework 기반으로 YES24 티켓 랭킹 데이터를 자동 수집하고, 정리된 결과를 메일로 전송하는 자동화 프로그램입니다.
 
+## 기술 환경
 
-### REFrameWork Template ###
-**Robotic Enterprise Framework**
+- UiPath Studio
+- Robotic Enterprise Framework(REFramework)
+- Excel, Web Automation
+- HTML Email, DataTable, Dictionary 등 활용
 
-* Built on top of *Transactional Business Process* template
-* Uses *State Machine* layout for the phases of automation project
-* Offers high level logging, exception handling and recovery
-* Keeps external settings in *Config.xlsx* file and Orchestrator assets
-* Pulls credentials from Orchestrator assets and *Windows Credential Manager*
-* Gets transaction data from Orchestrator queue and updates back status
-* Takes screenshots in case of system exceptions
+## 자동화 흐름 요약
 
+1. 수신 메일에서 항목 목록 추출
+2. 템플릿 복사 및 초기 Excel 시트 생성
+3. YES 24 티켓 랭킹 페이지 접속 및 항목 별 데이터 수집
+4. 시작일, 종료일, 장소 항목 분리 및 날짜 포맷 가공
+5. 항목별 1위 데이터를 본문 용 테이블로 정리
+6. 성공/실패 항목 구분 및 처리 결과 적용
+7. 전체 결과를 Excel 파일로 저장
+8. 메일 본문 작성 및 Excel 첨부 후 자동 발송
 
-### How It Works ###
+## 워크플로우 구성
 
-1. **INITIALIZE PROCESS**
- + ./Framework/*InitiAllSettings* - Load configuration data from Config.xlsx file and from assets
- + ./Framework/*GetAppCredential* - Retrieve credentials from Orchestrator assets or local Windows Credential Manager
- + ./Framework/*InitiAllApplications* - Open and login to applications used throughout the process
+- **Initialization**
+    01_Output 폴더 초기화.xaml
+    02_초기 변수 선언.xaml
+    03_결과 파일 생성.xaml
+    04_메일수신및항목추출.xaml
+    05_초기 DT 생성.xaml
+    06_엑셀 템플릿 리스트 복사.xaml
 
-2. **GET TRANSACTION DATA**
- + ./Framework/*GetTransactionData* - Fetches transactions from an Orchestrator queue defined by Config("OrchestratorQueueName") or any other configured data source
+- **Process Transaction**
+    07_티켓 랭킹 DT 추출 및 가공.xaml
+    08_티켓 랭킹 DT 저장.xaml
+    09_1위 DT 추출.xaml
 
-3. **PROCESS TRANSACTION**
- + *Process* - Process trasaction and invoke other workflows related to the process being automated 
- + ./Framework/*SetTransactionStatus* - Updates the status of the processed transaction (Orchestrator transactions by default): Success, Business Rule Exception or System Exception
-
-4. **END PROCESS**
- + ./Framework/*CloseAllApplications* - Logs out and closes applications used throughout the process
-
-
-### For New Project ###
-
-1. Check the Config.xlsx file and add/customize any required fields and values
-2. Implement InitiAllApplications.xaml and CloseAllApplicatoins.xaml workflows, linking them in the Config.xlsx fields
-3. Implement GetTransactionData.xaml and SetTransactionStatus.xaml according to the transaction type being used (Orchestrator queues by default)
-4. Implement Process.xaml workflow and invoke other workflows related to the process being automated
+- **End Process**
+    10_처리 결과 분류.xaml
+    11_메일 발송.xaml
